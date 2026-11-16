@@ -162,7 +162,6 @@ try {
     $whereSQL = '';
 
     if (!empty($conditions)) {
-
         $whereSQL = ' WHERE ' . implode(' AND ', $conditions);
     }
 
@@ -209,7 +208,6 @@ try {
     $stmt = $pdo->prepare($sql);
 
     foreach ($params as $key => $value) {
-
         $stmt->bindValue($key, $value, PDO::PARAM_STR);
     }
 
@@ -228,6 +226,15 @@ try {
 
     $errorMessage = 'Không thể tải danh sách chương trình khuyến mãi. Vui lòng kiểm tra cấu hình database và cấu trúc bảng.';
 }
+
+// -----------------------------------------------------
+// 9. DUONG DAN CAC CHUC NANG
+// -----------------------------------------------------
+
+$createUrl = BASE_URL . '/modules/promotions/create.php';
+$editUrl = BASE_URL . '/modules/promotions/edit.php';
+$selectProductsUrl = BASE_URL . '/modules/promotions/select_products.php';
+$listUrl = BASE_URL . '/promotions.php';
 
 ?>
 
@@ -252,17 +259,42 @@ try {
 
         </div>
 
-        <button
-            type="button"
+        <a
+            href="<?= $escape($createUrl) ?>"
             class="btn btn-primary"
-            disabled
-            title="Chức năng thêm chương trình sẽ được triển khai sau"
         >
             <i class="bi bi-plus-lg me-1"></i>
             Thêm chương trình
-        </button>
+        </a>
 
     </div>
+
+    <!-- THONG BAO THANH CONG -->
+    <?php if (isset($_GET['created'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle me-2"></i>
+            Thêm chương trình khuyến mãi thành công.
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+
+    <?php endif; ?>
+
+    <?php if (isset($_GET['updated'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle me-2"></i>
+            Cập nhật chương trình khuyến mãi thành công.
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"></button>
+        </div>
+
+    <?php endif; ?>
 
     <!-- THONG BAO LOI -->
     <?php if ($errorMessage !== ''): ?>
@@ -280,7 +312,6 @@ try {
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
-
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -292,7 +323,6 @@ try {
                     </h3>
 
                 </div>
-
             </div>
 
         </div>
@@ -300,7 +330,6 @@ try {
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
-
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -312,7 +341,6 @@ try {
                     </h3>
 
                 </div>
-
             </div>
 
         </div>
@@ -320,7 +348,6 @@ try {
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
-
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -332,7 +359,6 @@ try {
                     </h3>
 
                 </div>
-
             </div>
 
         </div>
@@ -344,7 +370,8 @@ try {
 
         <div class="card-body">
 
-            <form method="GET" action="<?= $escape(BASE_URL) ?>/promotions.php">
+            <form method="GET"
+                  action="<?= $escape($listUrl) ?>">
 
                 <div class="row g-3 align-items-end">
 
@@ -409,7 +436,7 @@ try {
                             </button>
 
                             <a
-                                href="<?= $escape(BASE_URL) ?>/promotions.php"
+                                href="<?= $escape($listUrl) ?>"
                                 class="btn btn-outline-secondary"
                                 title="Làm mới"
                             >
@@ -470,11 +497,11 @@ try {
                                 Ngày kết thúc
                             </th>
 
-                            <th class="text-center" style="min-width: 150px;">
+                            <th class="text-center" style="min-width: 130px;">
                                 Trạng thái
                             </th>
 
-                            <th class="text-center" style="width: 100px;">
+                            <th class="text-center" style="min-width: 150px;">
                                 Thao tác
                             </th>
 
@@ -506,6 +533,8 @@ try {
 
                                 <?php
 
+                                $promotionId = (int) $promotion['ma_chuong_trinh'];
+
                                 $promotionStatus = $promotion['trang_thai'];
 
                                 $statusLabel = $statusLabels[$promotionStatus]
@@ -513,6 +542,12 @@ try {
 
                                 $statusClass = $statusClasses[$promotionStatus]
                                     ?? 'bg-secondary';
+
+                                $currentEditUrl = $editUrl
+                                    . '?ma_chuong_trinh=' . $promotionId;
+
+                                $currentProductsUrl = $selectProductsUrl
+                                    . '?ma_chuong_trinh=' . $promotionId;
 
                                 ?>
 
@@ -530,7 +565,7 @@ try {
 
                                         <small class="text-muted">
                                             Mã: KM<?= str_pad(
-                                                (string) $promotion['ma_chuong_trinh'],
+                                                (string) $promotionId,
                                                 4,
                                                 '0',
                                                 STR_PAD_LEFT
@@ -559,16 +594,30 @@ try {
 
                                     </td>
 
+                                    <!-- CAC NUT THAO TAC -->
                                     <td class="text-center">
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-secondary"
-                                            disabled
-                                            title="Chức năng xem chi tiết sẽ triển khai sau"
-                                        >
-                                            <i class="bi bi-eye"></i>
-                                        </button>
+                                        <div class="d-flex justify-content-center gap-1">
+
+                                            <!-- CHINH SUA -->
+                                            <a
+                                                href="<?= $escape($currentEditUrl) ?>"
+                                                class="btn btn-sm btn-outline-primary"
+                                                title="Chỉnh sửa chương trình"
+                                            >
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+
+                                            <!-- CHON SAN PHAM -->
+                                            <a
+                                                href="<?= $escape($currentProductsUrl) ?>"
+                                                class="btn btn-sm btn-outline-success"
+                                                title="Quản lý sản phẩm khuyến mãi"
+                                            >
+                                                <i class="bi bi-box-seam"></i>
+                                            </a>
+
+                                        </div>
 
                                     </td>
 
@@ -613,7 +662,7 @@ try {
 
                             <a
                                 class="page-link"
-                                href="<?= $escape(BASE_URL) ?>/promotions.php?<?= $escape(http_build_query(array_merge($queryParams, ['page' => max(1, $currentPage - 1)]))) ?>"
+                                href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => max(1, $currentPage - 1)]))) ?>"
                             >
                                 Trước
                             </a>
@@ -626,7 +675,7 @@ try {
 
                                 <a
                                     class="page-link"
-                                    href="<?= $escape(BASE_URL) ?>/promotions.php?<?= $escape(http_build_query(array_merge($queryParams, ['page' => $i]))) ?>"
+                                    href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => $i]))) ?>"
                                 >
                                     <?= $i ?>
                                 </a>
@@ -639,7 +688,7 @@ try {
 
                             <a
                                 class="page-link"
-                                href="<?= $escape(BASE_URL) ?>/promotions.php?<?= $escape(http_build_query(array_merge($queryParams, ['page' => min($totalPages, $currentPage + 1)]))) ?>"
+                                href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => min($totalPages, $currentPage + 1)]))) ?>"
                             >
                                 Sau
                             </a>
