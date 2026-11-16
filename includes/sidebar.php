@@ -124,7 +124,8 @@ require_once __DIR__ . '/permission_check.php';
 
         <!-- DON HANG -->
         <?php if (co_quyen('orders.view')): ?>
-            <a href="#" class="menu-item">
+            <a href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/orders.php"
+               class="menu-item <?= $currentPage === 'orders.php' ? 'active' : '' ?>">
                 <i class="bi bi-receipt"></i>
                 <span>Đơn hàng</span>
             </a>
