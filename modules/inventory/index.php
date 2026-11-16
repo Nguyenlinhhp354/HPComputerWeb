@@ -81,6 +81,41 @@ function inventoryEscape($value)
 
 <?php endif; ?>
 
+<?php if (
+    (int)($_SESSION['ma_vai_tro'] ?? 0) === 1
+    || co_quyen('inventory.create')
+): ?>
+
+<div class="mb-4">
+    <a href="<?= htmlspecialchars(
+        BASE_URL,
+        ENT_QUOTES,
+        'UTF-8'
+    ) ?>/inventory_issues.php"
+       class="btn btn-warning">
+
+        <i class="bi bi-box-arrow-up me-1"></i>
+        Tạo phiếu xuất kho
+
+    </a>
+</div>
+
+<?php endif; ?>
+
+<div class="mb-3">
+    <a href="<?= htmlspecialchars(
+        BASE_URL,
+        ENT_QUOTES,
+        'UTF-8'
+    ) ?>/inventory_issue_list.php"
+       class="btn btn-outline-primary">
+
+        <i class="bi bi-list-ul me-1"></i>
+        Danh sách phiếu xuất kho
+
+    </a>
+</div>
+
     <!-- THONG KE -->
     <div class="row g-3 mb-4">
 
