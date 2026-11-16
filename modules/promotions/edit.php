@@ -1,12 +1,14 @@
-
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/permission_check.php';
+yeu_cau_quyen('promotions.edit');
+
 // =====================================================
 // HP COMPUTER
 // FILE: modules/promotions/edit.php
 // CHUC NANG: CHINH SUA CHUONG TRINH KHUYEN MAI
 // =====================================================
 
-require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 

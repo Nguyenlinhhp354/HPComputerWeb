@@ -1,5 +1,8 @@
-
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/permission_check.php';
+yeu_cau_quyen('promotions.edit');
+
 // =====================================================
 // HP COMPUTER
 // FILE: modules/promotions/select_products.php
@@ -10,7 +13,6 @@
 // 1. KIEM TRA DANG NHAP VA KET NOI
 // -----------------------------------------------------
 
-require_once __DIR__ . '/../../includes/auth_check.php';
 require_once __DIR__ . '/../../config/app.php';
 require_once __DIR__ . '/../../config/database.php';
 

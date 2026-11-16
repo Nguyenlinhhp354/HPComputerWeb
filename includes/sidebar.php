@@ -179,7 +179,7 @@ require_once __DIR__ . '/permission_check.php';
 
 
         <!-- NHAT KY HOAT DONG -->
-        <?php if (co_quyen('dashboard.view')): ?>
+        <?php if (co_quyen('activity_logs.view')): ?>
             <a href="#" class="menu-item">
                 <i class="bi bi-clock-history"></i>
                 <span>Nhật ký hoạt động</span>
