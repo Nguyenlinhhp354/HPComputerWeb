@@ -116,6 +116,29 @@ function inventoryEscape($value)
     </a>
 </div>
 
+<?php if (
+    co_quyen('inventory.create')
+    || (int)($_SESSION['ma_vai_tro'] ?? 0) === 1
+): ?>
+<div class="mb-3">
+    <a href="<?= inventoryEscape(BASE_URL) ?>/inventory_stocktake.php"
+       class="btn btn-info">
+        <i class="bi bi-clipboard-check me-1"></i>
+        Tạo phiếu kiểm kê kho
+    </a>
+</div>
+<?php endif; ?>
+
+<div class="mb-3">
+    <a
+        href="<?= inventoryEscape(BASE_URL) ?>/inventory_stocktake_list.php"
+        class="btn btn-outline-info"
+    >
+        <i class="bi bi-card-checklist me-1"></i>
+        Danh sách phiếu kiểm kê
+    </a>
+</div>
+
     <!-- THONG KE -->
     <div class="row g-3 mb-4">
 
