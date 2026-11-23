@@ -15,9 +15,12 @@ if (session_status() === PHP_SESSION_NONE) {
 // Nap cau hinh ung dung
 require_once __DIR__ . '/config/app.php';
 
+// URL trang chu mua hang
+$customerHomeUrl = rtrim(BASE_URL, '/') . '/modules/customers/index.php';
+
 // Chi cho phep dang xuat bang POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ' . BASE_URL . '/login.php');
+    header('Location: ' . $customerHomeUrl);
     exit;
 }
 
@@ -26,7 +29,8 @@ $token = $_POST['csrf_token'] ?? '';
 
 if (
     !is_string($token) ||
-    empty($_SESSION['csrf_token']) ||
+    !is_string($_SESSION['csrf_token'] ?? null) ||
+    $_SESSION['csrf_token'] === '' ||
     !hash_equals($_SESSION['csrf_token'], $token)
 ) {
     http_response_code(403);
@@ -44,17 +48,20 @@ if (ini_get('session.use_cookies')) {
     setcookie(
         session_name(),
         '',
-        time() - 42000,
-        $cookieParams['path'],
-        $cookieParams['domain'],
-        $cookieParams['secure'],
-        $cookieParams['httponly']
+        [
+            'expires' => time() - 42000,
+            'path' => $cookieParams['path'],
+            'domain' => $cookieParams['domain'],
+            'secure' => $cookieParams['secure'],
+            'httponly' => $cookieParams['httponly'],
+            'samesite' => $cookieParams['samesite'] ?? 'Lax'
+        ]
     );
 }
 
 // Huy Session
 session_destroy();
 
-// Chuyen ve trang dang nhap
-header('Location: ' . BASE_URL . '/login.php');
+// Chuyen ve trang chu mua hang
+header('Location: ' . $customerHomeUrl);
 exit;
