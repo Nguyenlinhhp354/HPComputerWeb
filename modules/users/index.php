@@ -1,5 +1,8 @@
-
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/permission_check.php';
+yeu_cau_quyen('users.view');
+
 // =====================================================
 // HP COMPUTER
 // FILE: modules/users/index.php
@@ -7,7 +10,6 @@
 // =====================================================
 
 // Kiem tra dang nhap va quyen truy cap
-require_once __DIR__ . '/../../includes/auth_check.php';
 
 // Ham xu ly du lieu an toan khi hien thi
 $escape = static function ($value) {

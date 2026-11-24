@@ -1,5 +1,8 @@
-
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/permission_check.php';
+yeu_cau_quyen('products.view');
+
 // =====================================================
 // MODULE: QUAN LY SAN PHAM
 // DU AN: HP COMPUTER
@@ -248,6 +251,7 @@ $deleteErrors = [
             </p>
         </div>
 
+        <?php if (co_quyen('products.create')): ?>
         <a href="<?= BASE_URL ?>/modules/products/create.php"
            class="btn btn-primary">
 
@@ -255,6 +259,7 @@ $deleteErrors = [
             Thêm sản phẩm
 
         </a>
+        <?php endif; ?>
 
     </div>
 
@@ -729,6 +734,7 @@ $deleteErrors = [
                                         <div class="d-flex justify-content-center gap-1">
 
                                             <!-- SUA -->
+                                            <?php if (co_quyen('products.edit')): ?>
                                             <a href="<?= BASE_URL ?>/modules/products/edit.php?id=<?= (int)$product['ma_san_pham'] ?>"
                                                class="btn btn-sm btn-outline-secondary"
                                                title="Cập nhật sản phẩm">
@@ -736,9 +742,11 @@ $deleteErrors = [
                                                 <i class="bi bi-pencil-square"></i>
 
                                             </a>
+                                            <?php endif; ?>
 
 
                                             <!-- XOA MEM -->
+                                            <?php if (co_quyen('products.delete')): ?>
                                             <?php if ($product['trang_thai'] === 'ACTIVE'): ?>
 
                                                 <form method="POST"
@@ -776,6 +784,7 @@ $deleteErrors = [
 
                                             <?php endif; ?>
 
+                                            <?php endif; ?>
                                         </div>
 
                                     </td>

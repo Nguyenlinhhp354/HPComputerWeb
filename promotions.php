@@ -1,5 +1,8 @@
-
 <?php
+require_once __DIR__ . '/includes/auth_check.php';
+require_once __DIR__ . '/includes/permission_check.php';
+yeu_cau_quyen('promotions.view');
+
 
 // =====================================================
 // HP COMPUTER
@@ -8,7 +11,6 @@
 // =====================================================
 
 // Kiem tra dang nhap
-require_once __DIR__ . '/includes/auth_check.php';
 
 // Nap cau hinh ung dung va database
 require_once __DIR__ . '/config/app.php';

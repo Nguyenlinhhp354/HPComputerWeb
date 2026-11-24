@@ -1,5 +1,9 @@
-
 <?php
+require_once __DIR__ . '/../../includes/auth_check.php';
+require_once __DIR__ . '/../../includes/permission_check.php';
+yeu_cau_quyen('promotions.view');
+
+
 // =====================================================
 // HP COMPUTER
 // FILE: modules/promotions/index.php

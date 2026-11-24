@@ -1,5 +1,8 @@
-
 <?php
+require_once __DIR__ . '/includes/auth_check.php';
+require_once __DIR__ . '/includes/permission_check.php';
+yeu_cau_quyen('users.view');
+
 // =====================================================
 // HP COMPUTER
 // FILE: users.php
@@ -7,7 +10,6 @@
 // =====================================================
 
 // Kiem tra dang nhap va trang thai tai khoan
-require_once __DIR__ . '/includes/auth_check.php';
 
 // Nap cau hinh ung dung
 require_once __DIR__ . '/config/app.php';
