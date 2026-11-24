@@ -8,6 +8,7 @@ yeu_cau_quyen('promotions.view');
 // HP COMPUTER
 // FILE: modules/promotions/index.php
 // CHUC NANG: DANH SACH CHUONG TRINH KHUYEN MAI
+// BO SUNG: GIA HAN VA LICH SU GIA HAN (ADMIN)
 // =====================================================
 
 // -----------------------------------------------------
@@ -22,7 +23,18 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
 }
 
 // -----------------------------------------------------
-// 2. KHOI TAO DU LIEU
+// 2. KIEM TRA QUYEN GIA HAN KHUYEN MAI
+// -----------------------------------------------------
+
+require_once __DIR__ . '/../../includes/permission_check.php';
+
+$isAdmin = (
+    lay_vai_tro_hien_tai() === 1
+    && co_quyen('promotions.extend')
+);
+
+// -----------------------------------------------------
+// 3. KHOI TAO DU LIEU
 // -----------------------------------------------------
 
 $keyword = trim($_GET['keyword'] ?? '');
@@ -39,7 +51,7 @@ $totalRecords = 0;
 $totalPages = 0;
 
 // -----------------------------------------------------
-// 3. DANH SACH TRANG THAI
+// 4. DANH SACH TRANG THAI
 // -----------------------------------------------------
 
 $statusLabels = [
@@ -59,7 +71,7 @@ $statusClasses = [
 ];
 
 // -----------------------------------------------------
-// 4. HAM HIEN THI DU LIEU AN TOAN
+// 5. HAM HIEN THI DU LIEU AN TOAN
 // -----------------------------------------------------
 
 $escape = static function ($value) {
@@ -71,7 +83,7 @@ $escape = static function ($value) {
 };
 
 // -----------------------------------------------------
-// 5. HAM DINH DANG NGAY GIO
+// 6. HAM DINH DANG NGAY GIO
 // -----------------------------------------------------
 
 $formatDate = static function ($date) {
@@ -90,7 +102,7 @@ $formatDate = static function ($date) {
 };
 
 // -----------------------------------------------------
-// 6. HAM DINH DANG MUC GIAM GIA
+// 7. HAM DINH DANG MUC GIAM GIA
 // -----------------------------------------------------
 
 $formatDiscount = static function ($promotion) {
@@ -124,7 +136,7 @@ $formatDiscount = static function ($promotion) {
 };
 
 // -----------------------------------------------------
-// 7. KIEM TRA BO LOC
+// 8. KIEM TRA BO LOC
 // -----------------------------------------------------
 
 if (!array_key_exists($status, $statusLabels)) {
@@ -132,7 +144,7 @@ if (!array_key_exists($status, $statusLabels)) {
 }
 
 // -----------------------------------------------------
-// 8. TRUY VAN DATABASE
+// 9. TRUY VAN DATABASE
 // -----------------------------------------------------
 
 try {
@@ -231,12 +243,14 @@ try {
 }
 
 // -----------------------------------------------------
-// 9. DUONG DAN CAC CHUC NANG
+// 10. DUONG DAN CAC CHUC NANG
 // -----------------------------------------------------
 
 $createUrl = BASE_URL . '/modules/promotions/create.php';
 $editUrl = BASE_URL . '/modules/promotions/edit.php';
 $selectProductsUrl = BASE_URL . '/modules/promotions/select_products.php';
+$extendUrl = BASE_URL . '/modules/promotions/extend.php';
+$historyUrl = BASE_URL . '/modules/promotions/extension_history.php';
 $listUrl = BASE_URL . '/promotions.php';
 
 ?>
@@ -276,12 +290,16 @@ $listUrl = BASE_URL . '/promotions.php';
     <?php if (isset($_GET['created'])): ?>
 
         <div class="alert alert-success alert-dismissible fade show">
+
             <i class="bi bi-check-circle me-2"></i>
             Thêm chương trình khuyến mãi thành công.
 
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"></button>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+            ></button>
+
         </div>
 
     <?php endif; ?>
@@ -289,12 +307,34 @@ $listUrl = BASE_URL . '/promotions.php';
     <?php if (isset($_GET['updated'])): ?>
 
         <div class="alert alert-success alert-dismissible fade show">
+
             <i class="bi bi-check-circle me-2"></i>
             Cập nhật chương trình khuyến mãi thành công.
 
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"></button>
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+            ></button>
+
+        </div>
+
+    <?php endif; ?>
+
+    <?php if (isset($_GET['extended'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="bi bi-check-circle me-2"></i>
+            Gia hạn chương trình khuyến mãi thành công.
+            Lịch sử gia hạn đã được lưu lại.
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+            ></button>
+
         </div>
 
     <?php endif; ?>
@@ -303,8 +343,10 @@ $listUrl = BASE_URL . '/promotions.php';
     <?php if ($errorMessage !== ''): ?>
 
         <div class="alert alert-danger">
+
             <i class="bi bi-exclamation-triangle me-2"></i>
             <?= $escape($errorMessage) ?>
+
         </div>
 
     <?php endif; ?>
@@ -315,6 +357,7 @@ $listUrl = BASE_URL . '/promotions.php';
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
+
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -326,6 +369,7 @@ $listUrl = BASE_URL . '/promotions.php';
                     </h3>
 
                 </div>
+
             </div>
 
         </div>
@@ -333,6 +377,7 @@ $listUrl = BASE_URL . '/promotions.php';
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
+
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -344,6 +389,7 @@ $listUrl = BASE_URL . '/promotions.php';
                     </h3>
 
                 </div>
+
             </div>
 
         </div>
@@ -351,6 +397,7 @@ $listUrl = BASE_URL . '/promotions.php';
         <div class="col-md-4">
 
             <div class="card border-0 shadow-sm h-100">
+
                 <div class="card-body">
 
                     <div class="text-muted small mb-2">
@@ -362,6 +409,7 @@ $listUrl = BASE_URL . '/promotions.php';
                     </h3>
 
                 </div>
+
             </div>
 
         </div>
@@ -373,8 +421,10 @@ $listUrl = BASE_URL . '/promotions.php';
 
         <div class="card-body">
 
-            <form method="GET"
-                  action="<?= $escape($listUrl) ?>">
+            <form
+                method="GET"
+                action="<?= $escape($listUrl) ?>"
+            >
 
                 <div class="row g-3 align-items-end">
 
@@ -504,7 +554,7 @@ $listUrl = BASE_URL . '/promotions.php';
                                 Trạng thái
                             </th>
 
-                            <th class="text-center" style="min-width: 150px;">
+                            <th class="text-center" style="min-width: 190px;">
                                 Thao tác
                             </th>
 
@@ -546,10 +596,20 @@ $listUrl = BASE_URL . '/promotions.php';
                                 $statusClass = $statusClasses[$promotionStatus]
                                     ?? 'bg-secondary';
 
+                                // Duong dan chinh sua
                                 $currentEditUrl = $editUrl
                                     . '?ma_chuong_trinh=' . $promotionId;
 
+                                // Duong dan quan ly san pham
                                 $currentProductsUrl = $selectProductsUrl
+                                    . '?ma_chuong_trinh=' . $promotionId;
+
+                                // Duong dan gia han
+                                $currentExtendUrl = $extendUrl
+                                    . '?ma_chuong_trinh=' . $promotionId;
+
+                                // Duong dan lich su gia han
+                                $currentHistoryUrl = $historyUrl
                                     . '?ma_chuong_trinh=' . $promotionId;
 
                                 ?>
@@ -620,6 +680,32 @@ $listUrl = BASE_URL . '/promotions.php';
                                                 <i class="bi bi-box-seam"></i>
                                             </a>
 
+                                            <?php if ($isAdmin): ?>
+
+                                                <!-- GIA HAN KHUYEN MAI -->
+                                                <?php if ($promotionStatus === 'ACTIVE'): ?>
+
+                                                    <a
+                                                        href="<?= $escape($currentExtendUrl) ?>"
+                                                        class="btn btn-sm btn-outline-warning"
+                                                        title="Gia hạn chương trình"
+                                                    >
+                                                        <i class="bi bi-calendar-plus"></i>
+                                                    </a>
+
+                                                <?php endif; ?>
+
+                                                <!-- LICH SU GIA HAN -->
+                                                <a
+                                                    href="<?= $escape($currentHistoryUrl) ?>"
+                                                    class="btn btn-sm btn-outline-info"
+                                                    title="Xem lịch sử gia hạn"
+                                                >
+                                                    <i class="bi bi-clock-history"></i>
+                                                </a>
+
+                                            <?php endif; ?>
+
                                         </div>
 
                                     </td>
@@ -665,7 +751,14 @@ $listUrl = BASE_URL . '/promotions.php';
 
                             <a
                                 class="page-link"
-                                href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => max(1, $currentPage - 1)]))) ?>"
+                                href="<?= $escape($listUrl) ?>?<?= $escape(
+                                    http_build_query(
+                                        array_merge(
+                                            $queryParams,
+                                            ['page' => max(1, $currentPage - 1)]
+                                        )
+                                    )
+                                ) ?>"
                             >
                                 Trước
                             </a>
@@ -678,7 +771,14 @@ $listUrl = BASE_URL . '/promotions.php';
 
                                 <a
                                     class="page-link"
-                                    href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => $i]))) ?>"
+                                    href="<?= $escape($listUrl) ?>?<?= $escape(
+                                        http_build_query(
+                                            array_merge(
+                                                $queryParams,
+                                                ['page' => $i]
+                                            )
+                                        )
+                                    ) ?>"
                                 >
                                     <?= $i ?>
                                 </a>
@@ -691,7 +791,14 @@ $listUrl = BASE_URL . '/promotions.php';
 
                             <a
                                 class="page-link"
-                                href="<?= $escape($listUrl) ?>?<?= $escape(http_build_query(array_merge($queryParams, ['page' => min($totalPages, $currentPage + 1)]))) ?>"
+                                href="<?= $escape($listUrl) ?>?<?= $escape(
+                                    http_build_query(
+                                        array_merge(
+                                            $queryParams,
+                                            ['page' => min($totalPages, $currentPage + 1)]
+                                        )
+                                    )
+                                ) ?>"
                             >
                                 Sau
                             </a>

@@ -92,14 +92,14 @@ require_once __DIR__ . '/permission_check.php';
         <?php endif; ?>
 
 
-        <!-- QUAN LY KHO -->
-        <?php if (co_quyen('inventory.view')): ?>
-            <a href="#" class="menu-item">
-                <i class="bi bi-boxes"></i>
-                <span>Quản lý kho</span>
-            </a>
-        <?php endif; ?>
-
+        <!-- QUAN LY KHO da sua-->
+   <?php if (co_quyen('inventory.view')): ?>
+    <a href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/inventory.php"
+       class="menu-item <?= $currentPage === 'inventory.php' ? 'active' : '' ?>">
+        <i class="bi bi-boxes"></i>
+        <span>Quản lý kho</span>
+    </a>
+<?php endif; ?>
 
         <!-- KINH DOANH -->
         <?php if (
